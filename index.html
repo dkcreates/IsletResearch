@@ -202,7 +202,7 @@
   /* ── FEATURES ── */
   .features {
     padding: 100px 60px;
-    background: linear-gradient(180deg, #edf2fb 0%, #dce8f8 100%);
+    background: #ffffff;
   }
   .section-header { text-align: center; margin-bottom: 64px; }
   .section-label {
@@ -386,7 +386,11 @@
     border-radius: 50px; padding: 3px 12px; margin-top: 10px; font-weight: 500;
   }
 
-  /* ── CTA ── */
+  .team-card-solo {
+    grid-column: 1 / -1;
+    max-width: calc(50% - 14px);
+    margin: 0 auto;
+  }
   .cta-section {
     padding: 100px 60px;
     background: linear-gradient(135deg, #0d1b3e 0%, #162252 60%, #1a2d60 100%);
@@ -519,20 +523,7 @@
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="4"/>
-        <circle cx="5" cy="7" r="2.5" opacity="0.7"/>
-        <circle cx="19" cy="7" r="2.5" opacity="0.7"/>
-        <circle cx="5" cy="17" r="2" opacity="0.5"/>
-        <circle cx="19" cy="17" r="2" opacity="0.5"/>
-        <line x1="7.5" y1="8.5" x2="10" y2="10.5" stroke="white" stroke-width="1"/>
-        <line x1="16.5" y1="8.5" x2="14" y2="10.5" stroke="white" stroke-width="1"/>
-      </svg>
-    </div>
-    <span>Islet Research Lab
-    <div class="sep"></div>
-    <span class="vcu">@VCU</span>
+    Islet Research Lab <span class="vcu">&nbsp;@VCU</span>
   </a>
   <div class="nav-links">
     <a href="#research">Research</a>
@@ -896,6 +887,20 @@
       <div class="team-photo">
         <div class="photo-placeholder">
           <div class="initials" style="background: linear-gradient(135deg, #7a3a9b, #a05ac0);">—</div>
+          <span class="placeholder-label">Photo Coming Soon</span>
+        </div>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Team Member Name</div>
+        <div class="team-role">Role / Title</div>
+        <div class="team-dept">Department</div>
+      </div>
+    </div>
+
+    <div class="team-card reveal team-card-solo">
+      <div class="team-photo">
+        <div class="photo-placeholder">
+          <div class="initials" style="background: linear-gradient(135deg, #c0392b, #e74c3c);">—</div>
           <span class="placeholder-label">Photo Coming Soon</span>
         </div>
       </div>
