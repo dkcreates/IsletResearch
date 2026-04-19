@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News — Islet Research Lab @ VCU</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b3e;
+    --navy-mid: #162252;
+    --blue-light: #c8d8f5;
+    --blue-pale: #e8eef8;
+    --blue-mid: #7fa3db;
+    --gold: #f0b429;
+    --gold-dark: #d4960a;
+    --white: #ffffff;
+    --text-dark: #0d1b3e;
+    --text-mid: #3a4a6b;
+    --text-light: #8090b0;
+    --radius: 18px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--blue-pale); color: var(--text-dark); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(232,238,248,0.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(200,216,245,0.5);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 4px;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem;
+    color: var(--text-dark); text-decoration: none;
+  }
+  .nav-logo .vcu { color: var(--gold); }
+  .nav-links { display: flex; align-items: center; gap: 36px; }
+  .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-links a.active { color: var(--navy); font-weight: 600; border-bottom: 2px solid var(--gold); padding-bottom: 2px; }
+  .nav-cta {
+    background: var(--gold); color: var(--navy); border: none;
+    padding: 10px 24px; border-radius: 50px;
+    font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.85rem;
+    cursor: pointer; transition: background 0.2s, transform 0.2s; text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--gold-dark); transform: translateY(-1px); }
+
+  /* PAGE HERO */
+  .page-hero {
+    padding: 140px 60px 80px;
+    background: linear-gradient(145deg, #dce8f8 0%, #e8f0fc 60%, #f0f4ff 100%);
+    position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(127,163,219,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .page-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+  .page-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(127,163,219,0.2); border: 1px solid rgba(127,163,219,0.4);
+    border-radius: 50px; padding: 6px 16px; margin-bottom: 20px;
+    font-size: 0.8rem; font-weight: 500; color: #3a5a9b; letter-spacing: 0.05em;
+  }
+  .page-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .page-hero h1 {
+    font-family: 'Sora', sans-serif; font-weight: 800;
+    font-size: clamp(2.2rem, 4vw, 3.2rem); color: var(--navy);
+    line-height: 1.1; margin-bottom: 16px;
+  }
+  .page-hero p { font-size: 1.05rem; color: var(--text-mid); max-width: 560px; line-height: 1.75; }
+
+  /* NEWS CONTENT */
+  .news-section {
+    padding: 72px 60px 100px;
+    max-width: 1160px; margin: 0 auto;
+  }
+
+  /* Featured article */
+  .news-featured {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    background: white; border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(200,216,245,0.6);
+    margin-bottom: 60px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .news-featured:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(58,107,191,0.12); }
+  .news-featured-image {
+    background: linear-gradient(135deg, #c8d8f5 0%, #a8c0e8 100%);
+    min-height: 380px; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .news-featured-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-placeholder-news {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 32px;
+  }
+  .img-placeholder-news svg { opacity: 0.35; }
+  .img-placeholder-news span { font-size: 0.78rem; color: rgba(58,90,155,0.5); text-align: center; line-height: 1.5; }
+  .news-featured-body {
+    padding: 48px 44px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .news-category {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .cat-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .cat-research .cat-dot { background: #3a6bbf; }
+  .cat-research { color: #3a6bbf; }
+  .cat-award .cat-dot { background: var(--gold); }
+  .cat-award { color: #a07010; }
+  .cat-event .cat-dot { background: #1a6b4a; }
+  .cat-event { color: #1a6b4a; }
+  .cat-media .cat-dot { background: #7a3a9b; }
+  .cat-media { color: #7a3a9b; }
+  .news-title {
+    font-family: 'Sora', sans-serif; font-weight: 700;
+    font-size: 1.4rem; color: var(--navy); line-height: 1.35;
+    margin-bottom: 14px;
+  }
+  .news-title a { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .news-title a:hover { color: #3a6bbf; }
+  .news-excerpt { font-size: 0.95rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 28px; }
+  .news-meta { display: flex; align-items: center; gap: 16px; font-size: 0.82rem; color: var(--text-light); margin-bottom: 24px; }
+  .news-meta span { display: flex; align-items: center; gap: 5px; }
+  .read-more {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.88rem;
+    color: #3a6bbf; text-decoration: none; transition: gap 0.2s, color 0.2s;
+  }
+  .read-more:hover { gap: 12px; color: var(--navy); }
+  .read-more svg { transition: transform 0.2s; }
+  .read-more:hover svg { transform: translateX(3px); }
+
+  /* Category filters */
+  .news-controls {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
+  }
+  .news-filters { display: flex; gap: 10px; flex-wrap: wrap; }
+  .news-filter-btn {
+    padding: 7px 18px; border-radius: 50px;
+    border: 1.5px solid rgba(200,216,245,0.8);
+    background: transparent; color: var(--text-mid);
+    font-family: 'DM Sans', sans-serif; font-size: 0.83rem; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .news-filter-btn:hover { border-color: #7fa3db; color: var(--navy); }
+  .news-filter-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+  /* News grid */
+  .news-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .news-card {
+    background: white; border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(200,216,245,0.6);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex; flex-direction: column;
+  }
+  .news-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(58,107,191,0.12); }
+  .news-card-image {
+    height: 200px; overflow: hidden;
+    background: linear-gradient(135deg, #c8d8f5 0%, #a8c0e8 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .news-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .news-card-body { padding: 24px 24px 28px; flex: 1; display: flex; flex-direction: column; }
+  .news-card-body .news-category { margin-bottom: 10px; }
+  .news-card-body .news-title { font-size: 1.05rem; margin-bottom: 10px; }
+  .news-card-body .news-excerpt { font-size: 0.88rem; margin-bottom: 16px; flex: 1; }
+  .news-card-body .news-meta { margin-bottom: 0; }
+
+  /* Load more */
+  .load-more-wrap { text-align: center; margin-top: 52px; }
+  .load-more-btn {
+    background: transparent; color: var(--navy);
+    border: 2px solid rgba(200,216,245,0.9);
+    padding: 14px 40px; border-radius: 50px;
+    font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; transition: all 0.25s;
+  }
+  .load-more-btn:hover { border-color: #7fa3db; background: white; box-shadow: 0 8px 24px rgba(58,107,191,0.1); }
+
+  /* FOOTER */
+  footer { background: #06101f; padding: 64px 60px 32px; color: rgba(255,255,255,0.6); }
+  .footer-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr 1.5fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { color: white; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
+  .footer-brand .logo span { color: var(--gold); }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; max-width: 240px; }
+  .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+  .social-icon { width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; text-decoration: none; }
+  .social-icon:hover { background: rgba(255,255,255,0.15); }
+  .social-icon svg { fill: rgba(255,255,255,0.7); width: 16px; }
+  .footer-col h4 { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.85rem; color: white; margin-bottom: 18px; }
+  .footer-col a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+  .footer-col a:hover { color: rgba(255,255,255,0.85); }
+  .footer-contact p { font-size: 0.85rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .footer-bottom { padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+  .footer-bottom-links { display: flex; gap: 24px; }
+  .footer-bottom-links a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-bottom-links a:hover { color: rgba(255,255,255,0.7); }
+
+  /* Animations */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  @media (max-width: 900px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .page-hero, .news-section { padding-left: 24px; padding-right: 24px; }
+    .news-featured { grid-template-columns: 1fr; }
+    .news-featured-image { min-height: 220px; }
+    .news-featured-body { padding: 28px; }
+    .news-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    footer { padding: 48px 24px 24px; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    Islet Research Lab <span class="vcu">&nbsp;@VCU</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#features">Focus</a>
+    <a href="index.html#research">Research</a>
+    <a href="index.html#team">Team</a>
+    <a href="publications.html">Publications</a>
+    <a href="news.html" class="active">News</a>
+  </div>
+  <a href="index.html#contact" class="nav-cta">Get in Touch</a>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-tag"><span class="dot"></span> Islet Research Lab @ VCU</div>
+    <h1>News &amp; Updates</h1>
+    <p>Stay current with the latest research breakthroughs, awards, lab events, and media coverage from the Islet Research Lab at VCU.</p>
+  </div>
+</div>
+
+<!-- NEWS CONTENT -->
+<div class="news-section">
+
+  <!-- Featured Article -->
+  <div class="news-featured reveal">
+    <div class="news-featured-image">
+      <!-- Replace with: <img src="images/news-featured.jpg" alt="Featured news"> -->
+      <div class="img-placeholder-news">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="4" y="10" width="48" height="36" rx="4" stroke="rgba(58,90,155,0.4)" stroke-width="2"/>
+          <circle cx="18" cy="22" r="5" stroke="rgba(58,90,155,0.4)" stroke-width="2"/>
+          <path d="M4 36l14-10 10 7 8-6 20 13" stroke="rgba(58,90,155,0.4)" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <span>Featured image<br/>Add your image here</span>
+      </div>
+    </div>
+    <div class="news-featured-body">
+      <div class="news-category cat-research"><span class="cat-dot"></span>Research</div>
+      <div class="news-meta">
+        <span>
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v11a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5h8v1H6V7zm0 3h8v1H6v-1zm0 3h5v1H6v-1z"/></svg>
+          Month DD, 2024
+        </span>
+        <span>
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg>
+          Islet Research Lab
+        </span>
+      </div>
+      <h2 class="news-title"><a href="#">Featured News Headline — Replace with actual news title</a></h2>
+      <p class="news-excerpt">Add a brief summary of this featured news article here. Describe the key findings, announcement, or event in 2–3 sentences to give readers a clear preview before clicking through to read more.</p>
+      <a href="#" class="read-more">
+        Read Full Story
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Grid Articles -->
+  <div class="news-controls reveal">
+    <div class="news-filters">
+      <button class="news-filter-btn active">All</button>
+      <button class="news-filter-btn">Research</button>
+      <button class="news-filter-btn">Awards</button>
+      <button class="news-filter-btn">Events</button>
+      <button class="news-filter-btn">Media</button>
+      <button class="news-filter-btn">Lab Updates</button>
+    </div>
+  </div>
+
+  <div class="news-grid">
+
+    <div class="news-card reveal">
+      <div class="news-card-image">
+        <!-- <img src="images/news-1.jpg" alt=""> -->
+        <div class="img-placeholder-news">
+          <svg width="36" height="36" viewBox="0 0 56 56" fill="none"><rect x="4" y="10" width="48" height="36" rx="4" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><circle cx="18" cy="22" r="5" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><path d="M4 36l14-10 10 7 8-6 20 13" stroke="rgba(58,90,155,0.4)" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="news-card-body">
+        <div class="news-category cat-award"><span class="cat-dot"></span>Award</div>
+        <h3 class="news-title"><a href="#">News Headline — Replace with actual title</a></h3>
+        <p class="news-excerpt">Brief summary of this news item. Add 1–2 sentences describing the announcement or update.</p>
+        <div class="news-meta">
+          <span><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v11a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/></svg> Month DD, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="news-card reveal reveal-delay-1">
+      <div class="news-card-image">
+        <div class="img-placeholder-news">
+          <svg width="36" height="36" viewBox="0 0 56 56" fill="none"><rect x="4" y="10" width="48" height="36" rx="4" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><circle cx="18" cy="22" r="5" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><path d="M4 36l14-10 10 7 8-6 20 13" stroke="rgba(58,90,155,0.4)" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="news-card-body">
+        <div class="news-category cat-event"><span class="cat-dot"></span>Event</div>
+        <h3 class="news-title"><a href="#">News Headline — Replace with actual title</a></h3>
+        <p class="news-excerpt">Brief summary of this news item. Add 1–2 sentences describing the announcement or update.</p>
+        <div class="news-meta">
+          <span><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v11a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/></svg> Month DD, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="news-card reveal reveal-delay-2">
+      <div class="news-card-image">
+        <div class="img-placeholder-news">
+          <svg width="36" height="36" viewBox="0 0 56 56" fill="none"><rect x="4" y="10" width="48" height="36" rx="4" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><circle cx="18" cy="22" r="5" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><path d="M4 36l14-10 10 7 8-6 20 13" stroke="rgba(58,90,155,0.4)" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="news-card-body">
+        <div class="news-category cat-media"><span class="cat-dot"></span>Media</div>
+        <h3 class="news-title"><a href="#">News Headline — Replace with actual title</a></h3>
+        <p class="news-excerpt">Brief summary of this news item. Add 1–2 sentences describing the announcement or update.</p>
+        <div class="news-meta">
+          <span><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v11a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/></svg> Month DD, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="news-card reveal">
+      <div class="news-card-image">
+        <div class="img-placeholder-news">
+          <svg width="36" height="36" viewBox="0 0 56 56" fill="none"><rect x="4" y="10" width="48" height="36" rx="4" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><circle cx="18" cy="22" r="5" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><path d="M4 36l14-10 10 7 8-6 20 13" stroke="rgba(58,90,155,0.4)" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="news-card-body">
+        <div class="news-category cat-research"><span class="cat-dot"></span>Research</div>
+        <h3 class="news-title"><a href="#">News Headline — Replace with actual title</a></h3>
+        <p class="news-excerpt">Brief summary of this news item. Add 1–2 sentences describing the announcement or update.</p>
+        <div class="news-meta">
+          <span><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v11a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/></svg> Month DD, 2023</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="news-card reveal reveal-delay-1">
+      <div class="news-card-image">
+        <div class="img-placeholder-news">
+          <svg width="36" height="36" viewBox="0 0 56 56" fill="none"><rect x="4" y="10" width="48" height="36" rx="4" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><circle cx="18" cy="22" r="5" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><path d="M4 36l14-10 10 7 8-6 20 13" stroke="rgba(58,90,155,0.4)" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="news-card-body">
+        <div class="news-category cat-award"><span class="cat-dot"></span>Award</div>
+        <h3 class="news-title"><a href="#">News Headline — Replace with actual title</a></h3>
+        <p class="news-excerpt">Brief summary of this news item. Add 1–2 sentences describing the announcement or update.</p>
+        <div class="news-meta">
+          <span><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v11a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/></svg> Month DD, 2023</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="news-card reveal reveal-delay-2">
+      <div class="news-card-image">
+        <div class="img-placeholder-news">
+          <svg width="36" height="36" viewBox="0 0 56 56" fill="none"><rect x="4" y="10" width="48" height="36" rx="4" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><circle cx="18" cy="22" r="5" stroke="rgba(58,90,155,0.4)" stroke-width="2"/><path d="M4 36l14-10 10 7 8-6 20 13" stroke="rgba(58,90,155,0.4)" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="news-card-body">
+        <div class="news-category cat-event"><span class="cat-dot"></span>Event</div>
+        <h3 class="news-title"><a href="#">News Headline — Replace with actual title</a></h3>
+        <p class="news-excerpt">Brief summary of this news item. Add 1–2 sentences describing the announcement or update.</p>
+        <div class="news-meta">
+          <span><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v11a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/></svg> Month DD, 2023</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="load-more-wrap reveal">
+    <button class="load-more-btn">Load More Articles</button>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Islet Research Lab <span>@VCU</span></div>
+      <p>Advancing the science of islet cell biology to develop transformative therapies for diabetes.</p>
+      <div class="footer-social">
+        <a class="social-icon" href="#" aria-label="Twitter">
+          <svg viewBox="0 0 20 20"><path d="M17.5 3.5s-1.5 1-2.5 1c-1-1.2-2.5-2-4-2C8 2.5 5.5 5 5.5 8c0 .3 0 .6.1.9C3.1 8.7 1.2 7.4.5 5.5c-.3 2.5 1 5 3.5 6.5-1 0-2-.3-2.5-.8.3 2 2 3.5 4 3.8-.8.2-1.8.2-2.5 0 .8 2 2.5 3 4.5 3C5.5 19 3 20 .5 19.5c2 1.2 4.5 2 7 2 8.5 0 13-7 13-13v-.5c.8-.6 1.5-1.4 2-2.2-1 .4-1.8.6-2.8.7.9-.6 1.5-1.5 1.8-2.5z"/></svg>
+        </a>
+        <a class="social-icon" href="#" aria-label="LinkedIn">
+          <svg viewBox="0 0 20 20"><path d="M4 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm-1.5 5h3v9h-3V8zM8 8h2.9v1.3c.4-.7 1.4-1.5 2.8-1.5 3 0 3.5 2 3.5 4.5V17h-3v-4c0-1 0-2.3-1.4-2.3-1.4 0-1.6 1.1-1.6 2.3V17H8V8z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>About Us</h4>
+      <a href="index.html#team">Our Lab</a>
+      <a href="index.html#team">Our Team</a>
+      <a href="#">Mission &amp; Vision</a>
+      <a href="news.html">News</a>
+    </div>
+    <div class="footer-col">
+      <h4>Research</h4>
+      <a href="publications.html">Publications</a>
+      <a href="index.html#research">Projects</a>
+      <a href="#">Clinical Trials</a>
+      <a href="#">Funding</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Partnerships</a>
+      <a href="#">Careers</a>
+      <a href="#">Lab Protocols</a>
+      <a href="#">Data Access</a>
+    </div>
+    <div class="footer-col">
+      <h4>Get in Touch</h4>
+      <p><svg width="14" height="14" viewBox="0 0 20 20" fill="rgba(255,255,255,0.5)"><path d="M2 4a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4zm2 0v.5l6 4 6-4V4H4zm0 2.5V16h12V6.5l-6 4-6-4z"/></svg> info@isletlab.vcu.edu</p>
+      <p><svg width="14" height="14" viewBox="0 0 20 20" fill="rgba(255,255,255,0.5)"><path d="M3 4a1 1 0 011-1h2.5l1.5 4-1.5 1a11 11 0 005 5l1-1.5 4 1.5v2.5a1 1 0 01-1 1C7.16 17 3 12.84 3 7.5V4z"/></svg> +1 (804) 828-0000</p>
+      <p><svg width="14" height="14" viewBox="0 0 20 20" fill="rgba(255,255,255,0.5)"><path d="M10 2a6 6 0 00-6 6c0 4 6 10 6 10s6-6 6-10a6 6 0 00-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z"/></svg> Richmond, VA 23298</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Islet Research Lab @ VCU. All rights reserved.</span>
+    <div class="footer-bottom-links">
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(13,27,62,0.1)' : 'none';
+  });
+
+  document.querySelectorAll('.news-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

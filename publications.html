@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publications — Islet Research Lab @ VCU</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b3e;
+    --navy-mid: #162252;
+    --blue-light: #c8d8f5;
+    --blue-pale: #e8eef8;
+    --blue-mid: #7fa3db;
+    --gold: #f0b429;
+    --gold-dark: #d4960a;
+    --white: #ffffff;
+    --text-dark: #0d1b3e;
+    --text-mid: #3a4a6b;
+    --text-light: #8090b0;
+    --card-bg: rgba(255,255,255,0.9);
+    --radius: 18px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--blue-pale); color: var(--text-dark); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(232,238,248,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(200,216,245,0.5);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 4px;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem;
+    color: var(--text-dark); text-decoration: none;
+  }
+  .nav-logo .vcu { color: var(--gold); }
+  .nav-links { display: flex; align-items: center; gap: 36px; }
+  .nav-links a {
+    font-size: 0.9rem; font-weight: 500; color: var(--text-mid);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--navy); }
+  .nav-links a.active { font-weight: 600; border-bottom: 2px solid var(--gold); padding-bottom: 2px; }
+  .nav-cta {
+    background: var(--gold); color: var(--navy); border: none;
+    padding: 10px 24px; border-radius: 50px;
+    font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.85rem;
+    cursor: pointer; transition: background 0.2s, transform 0.2s; text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--gold-dark); transform: translateY(-1px); }
+
+  /* PAGE HERO */
+  .page-hero {
+    padding: 140px 60px 80px;
+    background: linear-gradient(145deg, #dce8f8 0%, #e8f0fc 60%, #f0f4ff 100%);
+    position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(127,163,219,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .page-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+  .page-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(127,163,219,0.2); border: 1px solid rgba(127,163,219,0.4);
+    border-radius: 50px; padding: 6px 16px; margin-bottom: 20px;
+    font-size: 0.8rem; font-weight: 500; color: #3a5a9b; letter-spacing: 0.05em;
+  }
+  .page-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .page-hero h1 {
+    font-family: 'Sora', sans-serif; font-weight: 800;
+    font-size: clamp(2.2rem, 4vw, 3.2rem); color: var(--navy);
+    line-height: 1.1; margin-bottom: 16px;
+  }
+  .page-hero p { font-size: 1.05rem; color: var(--text-mid); max-width: 560px; line-height: 1.75; }
+  .pub-stats {
+    display: flex; gap: 48px; margin-top: 40px;
+  }
+  .pub-stat-num {
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 2.2rem;
+    color: var(--navy); line-height: 1;
+  }
+  .pub-stat-num span { color: var(--gold); }
+  .pub-stat-label { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; }
+
+  /* FILTERS */
+  .filters-bar {
+    background: white; border-bottom: 1px solid rgba(200,216,245,0.5);
+    padding: 20px 60px; position: sticky; top: 73px; z-index: 90;
+  }
+  .filters-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 8px 20px; border-radius: 50px; border: 1.5px solid rgba(200,216,245,0.8);
+    background: transparent; color: var(--text-mid); font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: #7fa3db; color: var(--navy); }
+  .filter-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+  .filter-sep { width: 1px; height: 24px; background: rgba(200,216,245,0.8); margin: 0 4px; }
+  .search-box {
+    margin-left: auto; display: flex; align-items: center; gap: 8px;
+    background: var(--blue-pale); border: 1.5px solid rgba(200,216,245,0.8);
+    border-radius: 50px; padding: 8px 16px;
+  }
+  .search-box svg { opacity: 0.4; flex-shrink: 0; }
+  .search-box input {
+    border: none; background: transparent; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; color: var(--text-dark); outline: none; width: 180px;
+  }
+  .search-box input::placeholder { color: var(--text-light); }
+
+  /* PUBLICATIONS LIST */
+  .pubs-section { padding: 60px 60px 100px; max-width: 1160px; margin: 0 auto; }
+
+  .year-group { margin-bottom: 56px; }
+  .year-label {
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.4rem;
+    color: var(--navy); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .year-label::after {
+    content: ''; flex: 1; height: 1px; background: rgba(200,216,245,0.8);
+  }
+
+  .pub-card {
+    background: white; border-radius: 16px;
+    border: 1px solid rgba(200,216,245,0.6);
+    padding: 28px 32px; margin-bottom: 16px;
+    transition: transform 0.25s, box-shadow 0.25s;
+    display: flex; gap: 28px; align-items: flex-start;
+  }
+  .pub-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(58,107,191,0.1); }
+  .pub-number {
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.2rem;
+    color: rgba(127,163,219,0.5); flex-shrink: 0; width: 36px; padding-top: 2px;
+  }
+  .pub-content { flex: 1; min-width: 0; }
+  .pub-title {
+    font-family: 'Sora', sans-serif; font-weight: 600; font-size: 1rem;
+    color: var(--navy); margin-bottom: 8px; line-height: 1.45;
+  }
+  .pub-title a { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .pub-title a:hover { color: #3a6bbf; }
+  .pub-authors { font-size: 0.88rem; color: var(--text-mid); margin-bottom: 10px; line-height: 1.5; }
+  .pub-authors strong { color: var(--navy); font-weight: 600; }
+  .pub-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .pub-journal {
+    font-size: 0.82rem; font-weight: 600; font-style: italic;
+    color: #3a6bbf;
+  }
+  .pub-details { font-size: 0.82rem; color: var(--text-light); }
+  .pub-badge {
+    font-size: 0.72rem; font-weight: 600; padding: 3px 10px;
+    border-radius: 50px; letter-spacing: 0.04em;
+  }
+  .badge-featured { background: rgba(240,180,41,0.15); color: #a07010; }
+  .badge-review { background: rgba(58,107,191,0.1); color: #3a6bbf; }
+  .badge-clinical { background: rgba(26,107,74,0.1); color: #1a6b4a; }
+  .pub-actions { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+  .pub-link {
+    font-size: 0.8rem; font-weight: 600; color: #3a6bbf;
+    text-decoration: none; display: flex; align-items: center; gap: 4px;
+    transition: color 0.2s;
+  }
+  .pub-link:hover { color: var(--navy); }
+  .pub-link svg { width: 12px; }
+
+  /* FOOTER */
+  footer {
+    background: #06101f; padding: 64px 60px 32px;
+    color: rgba(255,255,255,0.6);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr 1.5fr;
+    gap: 48px; margin-bottom: 56px;
+  }
+  .footer-brand .logo { color: white; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
+  .footer-brand .logo span { color: var(--gold); }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; max-width: 240px; }
+  .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+  .social-icon {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.2s; text-decoration: none;
+  }
+  .social-icon:hover { background: rgba(255,255,255,0.15); }
+  .social-icon svg { fill: rgba(255,255,255,0.7); width: 16px; }
+  .footer-col h4 { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.85rem; color: white; margin-bottom: 18px; }
+  .footer-col a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+  .footer-col a:hover { color: rgba(255,255,255,0.85); }
+  .footer-contact p { font-size: 0.85rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .footer-bottom {
+    padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;
+  }
+  .footer-bottom-links { display: flex; gap: 24px; }
+  .footer-bottom-links a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-bottom-links a:hover { color: rgba(255,255,255,0.7); }
+
+  /* Animations */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+
+  @media (max-width: 900px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .page-hero, .pubs-section { padding-left: 24px; padding-right: 24px; }
+    .filters-bar { padding: 16px 24px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    footer { padding: 48px 24px 24px; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    .pub-card { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    Islet Research Lab <span class="vcu">&nbsp;@VCU</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#features">Focus</a>
+    <a href="index.html#research">Research</a>
+    <a href="index.html#team">Team</a>
+    <a href="publications.html" class="active">Publications</a>
+    <a href="news.html">News</a>
+  </div>
+  <a href="index.html#contact" class="nav-cta">Get in Touch</a>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-tag"><span class="dot"></span> Islet Research Lab @ VCU</div>
+    <h1>Publications</h1>
+    <p>Peer-reviewed research, clinical studies, and scientific contributions from the Islet Research Lab at Virginia Commonwealth University.</p>
+    <div class="pub-stats">
+      <div>
+        <div class="pub-stat-num">130<span>+</span></div>
+        <div class="pub-stat-label">Total Publications</div>
+      </div>
+      <div>
+        <div class="pub-stat-num">2,400<span>+</span></div>
+        <div class="pub-stat-label">Total Citations</div>
+      </div>
+      <div>
+        <div class="pub-stat-num">24</div>
+        <div class="pub-stat-label">h-index</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <div class="filters-inner">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">2024</button>
+    <button class="filter-btn">2023</button>
+    <button class="filter-btn">2022</button>
+    <button class="filter-btn">2021</button>
+    <div class="filter-sep"></div>
+    <button class="filter-btn">Original Research</button>
+    <button class="filter-btn">Reviews</button>
+    <button class="filter-btn">Clinical</button>
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="var(--text-dark)"><path d="M13 11l4 4-1.5 1.5-4-4A6 6 0 112 8a6 6 0 0111 3zm-6 1a4 4 0 100-8 4 4 0 000 8z"/></svg>
+      <input type="text" placeholder="Search publications…">
+    </div>
+  </div>
+</div>
+
+<!-- PUBLICATIONS -->
+<div class="pubs-section">
+
+  <div class="year-group reveal">
+    <div class="year-label">2024</div>
+
+    <div class="pub-card">
+      <div class="pub-number">1</div>
+      <div class="pub-content">
+        <div class="pub-title"><a href="#">Publication Title — Replace with actual title</a></div>
+        <div class="pub-authors"><strong>Kanak MA</strong>, Saravanan PB, Kalivarathan J, Mohammed S, et al.</div>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name</span>
+          <span class="pub-details">Vol. 00, pp. 000–000</span>
+          <span class="pub-badge badge-featured">Featured</span>
+        </div>
+        <div class="pub-actions">
+          <a href="#" class="pub-link">PubMed <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">DOI <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">PDF <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-card">
+      <div class="pub-number">2</div>
+      <div class="pub-content">
+        <div class="pub-title"><a href="#">Publication Title — Replace with actual title</a></div>
+        <div class="pub-authors">Saravanan PB, <strong>Kanak MA</strong>, Kalivarathan J, et al.</div>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name</span>
+          <span class="pub-details">Vol. 00, pp. 000–000</span>
+          <span class="pub-badge badge-review">Review</span>
+        </div>
+        <div class="pub-actions">
+          <a href="#" class="pub-link">PubMed <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">DOI <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-card">
+      <div class="pub-number">3</div>
+      <div class="pub-content">
+        <div class="pub-title"><a href="#">Publication Title — Replace with actual title</a></div>
+        <div class="pub-authors">Kalivarathan J, Mohammed S, <strong>Kanak MA</strong>, et al.</div>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name</span>
+          <span class="pub-details">Vol. 00, pp. 000–000</span>
+          <span class="pub-badge badge-clinical">Clinical</span>
+        </div>
+        <div class="pub-actions">
+          <a href="#" class="pub-link">PubMed <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">DOI <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-group reveal reveal-delay-1">
+    <div class="year-label">2023</div>
+
+    <div class="pub-card">
+      <div class="pub-number">4</div>
+      <div class="pub-content">
+        <div class="pub-title"><a href="#">Publication Title — Replace with actual title</a></div>
+        <div class="pub-authors"><strong>Kanak MA</strong>, Mohammed S, Saravanan PB, et al.</div>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name</span>
+          <span class="pub-details">Vol. 00, pp. 000–000</span>
+          <span class="pub-badge badge-featured">Featured</span>
+        </div>
+        <div class="pub-actions">
+          <a href="#" class="pub-link">PubMed <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">DOI <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">PDF <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-card">
+      <div class="pub-number">5</div>
+      <div class="pub-content">
+        <div class="pub-title"><a href="#">Publication Title — Replace with actual title</a></div>
+        <div class="pub-authors">Saravanan PB, Kalivarathan J, <strong>Kanak MA</strong>, et al.</div>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name</span>
+          <span class="pub-details">Vol. 00, pp. 000–000</span>
+          <span class="pub-badge badge-review">Review</span>
+        </div>
+        <div class="pub-actions">
+          <a href="#" class="pub-link">PubMed <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">DOI <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-card">
+      <div class="pub-number">6</div>
+      <div class="pub-content">
+        <div class="pub-title"><a href="#">Publication Title — Replace with actual title</a></div>
+        <div class="pub-authors"><strong>Kanak MA</strong>, Kalivarathan J, et al.</div>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name</span>
+          <span class="pub-details">Vol. 00, pp. 000–000</span>
+        </div>
+        <div class="pub-actions">
+          <a href="#" class="pub-link">PubMed <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">DOI <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-group reveal reveal-delay-2">
+    <div class="year-label">2022</div>
+
+    <div class="pub-card">
+      <div class="pub-number">7</div>
+      <div class="pub-content">
+        <div class="pub-title"><a href="#">Publication Title — Replace with actual title</a></div>
+        <div class="pub-authors">Mohammed S, <strong>Kanak MA</strong>, Saravanan PB, et al.</div>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name</span>
+          <span class="pub-details">Vol. 00, pp. 000–000</span>
+          <span class="pub-badge badge-clinical">Clinical</span>
+        </div>
+        <div class="pub-actions">
+          <a href="#" class="pub-link">PubMed <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">DOI <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">PDF <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-card">
+      <div class="pub-number">8</div>
+      <div class="pub-content">
+        <div class="pub-title"><a href="#">Publication Title — Replace with actual title</a></div>
+        <div class="pub-authors"><strong>Kanak MA</strong>, Saravanan PB, et al.</div>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name</span>
+          <span class="pub-details">Vol. 00, pp. 000–000</span>
+        </div>
+        <div class="pub-actions">
+          <a href="#" class="pub-link">PubMed <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+          <a href="#" class="pub-link">DOI <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Islet Research Lab <span>@VCU</span></div>
+      <p>Advancing the science of islet cell biology to develop transformative therapies for diabetes.</p>
+      <div class="footer-social">
+        <a class="social-icon" href="#" aria-label="Twitter">
+          <svg viewBox="0 0 20 20"><path d="M17.5 3.5s-1.5 1-2.5 1c-1-1.2-2.5-2-4-2C8 2.5 5.5 5 5.5 8c0 .3 0 .6.1.9C3.1 8.7 1.2 7.4.5 5.5c-.3 2.5 1 5 3.5 6.5-1 0-2-.3-2.5-.8.3 2 2 3.5 4 3.8-.8.2-1.8.2-2.5 0 .8 2 2.5 3 4.5 3C5.5 19 3 20 .5 19.5c2 1.2 4.5 2 7 2 8.5 0 13-7 13-13v-.5c.8-.6 1.5-1.4 2-2.2-1 .4-1.8.6-2.8.7.9-.6 1.5-1.5 1.8-2.5z"/></svg>
+        </a>
+        <a class="social-icon" href="#" aria-label="LinkedIn">
+          <svg viewBox="0 0 20 20"><path d="M4 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm-1.5 5h3v9h-3V8zM8 8h2.9v1.3c.4-.7 1.4-1.5 2.8-1.5 3 0 3.5 2 3.5 4.5V17h-3v-4c0-1 0-2.3-1.4-2.3-1.4 0-1.6 1.1-1.6 2.3V17H8V8z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>About Us</h4>
+      <a href="index.html#team">Our Lab</a>
+      <a href="index.html#team">Our Team</a>
+      <a href="#">Mission &amp; Vision</a>
+      <a href="news.html">News</a>
+    </div>
+    <div class="footer-col">
+      <h4>Research</h4>
+      <a href="publications.html">Publications</a>
+      <a href="index.html#research">Projects</a>
+      <a href="#">Clinical Trials</a>
+      <a href="#">Funding</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Partnerships</a>
+      <a href="#">Careers</a>
+      <a href="#">Lab Protocols</a>
+      <a href="#">Data Access</a>
+    </div>
+    <div class="footer-col">
+      <h4>Get in Touch</h4>
+      <p><svg width="14" height="14" viewBox="0 0 20 20" fill="rgba(255,255,255,0.5)"><path d="M2 4a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4zm2 0v.5l6 4 6-4V4H4zm0 2.5V16h12V6.5l-6 4-6-4z"/></svg> info@isletlab.vcu.edu</p>
+      <p><svg width="14" height="14" viewBox="0 0 20 20" fill="rgba(255,255,255,0.5)"><path d="M3 4a1 1 0 011-1h2.5l1.5 4-1.5 1a11 11 0 005 5l1-1.5 4 1.5v2.5a1 1 0 01-1 1C7.16 17 3 12.84 3 7.5V4z"/></svg> +1 (804) 828-0000</p>
+      <p><svg width="14" height="14" viewBox="0 0 20 20" fill="rgba(255,255,255,0.5)"><path d="M10 2a6 6 0 00-6 6c0 4 6 10 6 10s6-6 6-10a6 6 0 00-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z"/></svg> Richmond, VA 23298</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Islet Research Lab @ VCU. All rights reserved.</span>
+    <div class="footer-bottom-links">
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(13,27,62,0.1)' : 'none';
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
