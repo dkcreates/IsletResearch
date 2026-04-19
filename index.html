@@ -516,6 +516,34 @@
     footer { padding: 48px 24px 24px; }
     .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   }
+  .network-svg {
+  transition: transform 0.15s ease-out;
+}
+
+/* Orbit rotation */
+.orbit {
+  transform-origin: 300px 240px;
+  animation: rotate 40s linear infinite;
+}
+
+.orbit-2 {
+  animation-duration: 60s;
+  animation-direction: reverse;
+}
+
+.orbit-3 {
+  animation-duration: 90s;
+}
+
+/* Core subtle movement */
+.core circle {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Tiny floating particles */
+.floaters circle {
+  animation: float 8s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
@@ -1017,6 +1045,14 @@
   window.addEventListener('scroll', () => {
     nav.style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(13,27,62,0.1)' : 'none';
   });
+  const svg = document.querySelector('.network-svg');
+
+document.addEventListener('mousemove', (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 30;
+  const y = (e.clientY / window.innerHeight - 0.5) * 30;
+
+  svg.style.transform = `translate(${x}px, ${y}px)`;
+});
 </script>
 </body>
 </html>
