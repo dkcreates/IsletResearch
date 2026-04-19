@@ -519,31 +519,6 @@
   .network-svg {
   transition: transform 0.15s ease-out;
 }
-
-/* Orbit rotation */
-.orbit {
-  transform-origin: 300px 240px;
-  animation: rotate 40s linear infinite;
-}
-
-.orbit-2 {
-  animation-duration: 60s;
-  animation-direction: reverse;
-}
-
-.orbit-3 {
-  animation-duration: 90s;
-}
-
-/* Core subtle movement */
-.core circle {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Tiny floating particles */
-.floaters circle {
-  animation: float 8s ease-in-out infinite;
-}
 </style>
 </head>
 <body>
@@ -1053,6 +1028,48 @@ document.addEventListener('mousemove', (e) => {
 
   svg.style.transform = `translate(${x}px, ${y}px)`;
 });
+  const items = document.querySelectorAll('.orbit-item');
+
+let angle = 0;
+
+function animateOrbit() {
+  angle += 0.01; // speed of rotation
+
+  items.forEach((item, i) => {
+    const baseX = parseFloat(item.getAttribute('data-base-x') || item.getAttribute('cx'));
+    const baseY = parseFloat(item.getAttribute('data-base-y') || item.getAttribute('cy'));
+
+    // store original position once
+    if (!item.dataset.baseX) {
+      item.dataset.baseX = baseX;
+      item.dataset.baseY = baseY;
+    }
+
+    const x = parseFloat(item.dataset.baseX);
+    const y = parseFloat(item.dataset.baseY);
+
+    const radiusX = 120; // horizontal orbit width
+    const radiusY = 40;  // squash for 3D effect
+
+    const offset = i * (Math.PI * 2 / items.length);
+
+    const theta = angle + offset;
+
+    const newX = x + Math.cos(theta) * radiusX;
+    const scale = 0.6 + Math.sin(theta) * 0.4; // depth illusion
+
+    item.setAttribute('transform', `
+      translate(${Math.cos(theta) * radiusX}, 0)
+      scale(${scale})
+    `);
+
+    item.style.opacity = 0.4 + scale * 0.6;
+  });
+
+  requestAnimationFrame(animateOrbit);
+}
+
+animateOrbit();
 </script>
 </body>
 </html>
