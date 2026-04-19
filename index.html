@@ -516,19 +516,6 @@
     footer { padding: 48px 24px 24px; }
     .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   }
-  .network-svg {
-  transition: transform 0.15s ease-out;
-}
-
-/* Orbit rotation */
-.orbit {
-  transform-origin: 300px 240px;
-  animation: none;
-}
-
-body.clustered .orbit {
-  animation: rotate 40s linear infinite;
-}
 </style>
 </head>
 <body>
@@ -602,14 +589,14 @@ body.clustered .orbit {
         <circle cx="210" cy="240" r="20" fill="url(#gradBlue3)" opacity="0.6"/>
         <circle cx="370" cy="255" r="18" fill="url(#gradBlue1)" opacity="0.6"/>
         <!-- Gold accent orbs -->
-        <circle cx="245" cy="185" data-start-x="100" data-start-y="20" r="22" fill="url(#gradGold1)" opacity="0.9"/>
+        <circle cx="245" cy="185" r="22" fill="url(#gradGold1)" opacity="0.9"/>
         <circle cx="360" cy="300" r="18" fill="url(#gradGold2)" opacity="0.85"/>
         <circle cx="180" cy="280" r="14" fill="url(#gradGold1)" opacity="0.7"/>
         <!-- Outer icon orbs -->
         <circle cx="180" cy="160" r="28" fill="url(#gradDark)"/>
         <circle cx="420" cy="150" r="28" fill="url(#gradDark)"/>
-        <circle cx="210" cy="240" data-start-x="30" data-start-y="240" r="20" fill="url(#gradBlue3)"/>
-        <circle cx="370" cy="255" data-start-x="600" data-start-y="260" r="18" fill="url(#gradBlue1)"/>
+        <circle cx="450" cy="300" r="24" fill="url(#gradDark)"/>
+        <circle cx="160" cy="310" r="22" fill="url(#gradDark)"/>
         <circle cx="320" cy="100" r="20" fill="url(#gradGold1)"/>
         <!-- Small floating orbs -->
         <circle cx="390" cy="180" r="10" fill="url(#gradBlue2)" opacity="0.6"/>
@@ -1021,55 +1008,6 @@ body.clustered .orbit {
       if (id.length > 1) {
         const el = document.querySelector(id);
         if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
-        // ===== SVG SCROLL MORPH =====
-  const circles = document.querySelectorAll('.network-svg circle');
-  
-  // Start in expanded state
-  window.addEventListener('load', () => {
-    circles.forEach(circle => {
-      const startX = circle.dataset.startX;
-      const startY = circle.dataset.startY;
-  
-      if (startX && startY) {
-        circle.setAttribute('cx', startX);
-        circle.setAttribute('cy', startY);
-      }
-    });
-  });
-  
-  // Animate on scroll
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    const maxScroll = window.innerHeight * 0.6;
-  
-    const raw = Math.min(scrollY / maxScroll, 1);
-    const progress = 1 - Math.pow(1 - raw, 3); // smooth easing
-  
-    circles.forEach(circle => {
-      const startX = parseFloat(circle.dataset.startX);
-      const startY = parseFloat(circle.dataset.startY);
-  
-      if (!startX || !startY) return;
-  
-      const endX = parseFloat(circle.getAttribute('cx-original') || circle.getAttribute('cx'));
-      const endY = parseFloat(circle.getAttribute('cy-original') || circle.getAttribute('cy'));
-  
-      // store original once
-      if (!circle.getAttribute('cx-original')) {
-        circle.setAttribute('cx-original', endX);
-        circle.setAttribute('cy-original', endY);
-      }
-  
-      const currentX = startX + (endX - startX) * progress;
-      const currentY = startY + (endY - startY) * progress;
-  
-      circle.setAttribute('cx', currentX);
-      circle.setAttribute('cy', currentY);
-    });
-  
-    // Enable orbit AFTER cluster forms
-    document.body.classList.toggle('clustered', progress > 0.95);
-  });
       }
     });
   });
@@ -1079,14 +1017,6 @@ body.clustered .orbit {
   window.addEventListener('scroll', () => {
     nav.style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(13,27,62,0.1)' : 'none';
   });
-  const svg = document.querySelector('.network-svg');
-
-document.addEventListener('mousemove', (e) => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 30;
-  const y = (e.clientY / window.innerHeight - 0.5) * 30;
-
-  svg.style.transform = `translate(${x}px, ${y}px)`;
-});
 </script>
 </body>
 </html>
